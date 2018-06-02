@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/101GamesMMO.iml" filepath="$PROJECT_DIR$/101GamesMMO.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/101GamesMMO_main.iml" filepath="$PROJECT_DIR$/.idea/modules/101GamesMMO_main.iml" group="101GamesMMO" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/101GamesMMO_test.iml" filepath="$PROJECT_DIR$/.idea/modules/101GamesMMO_test.iml" group="101GamesMMO" />
     </modules>
   </component>
 </project>

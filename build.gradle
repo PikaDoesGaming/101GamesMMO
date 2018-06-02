@@ -1,0 +1,48 @@
+plugins {
+    id 'java'
+    id 'idea'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = targetCompatibility = 1.8
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.thewaveearthsociety.game.Launcher'
+    }
+}
+
+task generateJarRun {
+    doLast {
+        def final jarRunConfiguration =
+        '''    <configuration name="Run 101GamesMMO" type="JarApplication" factoryName="JAR Application">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/build/libs/101GamesMMO.jar" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <module name="101GamesMMO" />
+      <method>
+        <option name="Gradle.BeforeRunTask" enabled="true" tasks="build" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="" />
+      </method>
+    </configuration>'''
+        def rootXML = new XmlParser(false, true).parse(new File(".idea/workspace.xml"))
+        def runManager = rootXML.component.find{c -> c.@name == 'RunManager'}
+        runManager.children().add(0, new XmlParser(false, true).parseText(jarRunConfiguration))
+        new XmlNodePrinter(new PrintWriter(new FileWriter('.idea/workspace.xml'))).print(rootXML)
+    }
+}
+
+build.dependsOn generateJarRun
