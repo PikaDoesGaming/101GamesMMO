@@ -1,44 +1,41 @@
 package com.thewaveearthsociety.game;
 
+import com.thewaveearthsociety.gfx.Display;
+import com.thewaveearthsociety.gfx.ImageLoader;
+import com.thewaveearthsociety.gfx.SpriteSheet;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 
 public class Game extends Canvas implements Runnable {
 
-    private static final int WIDTH = 160;
-    private static final int HEIGHT = WIDTH / 12 * 9;
-    private static final int SCALE = 6;
-    private static final String NAME = "101GamesMMO";
+    private String title;
+    private int width,height;
 
-    public JFrame frame;
-    public boolean running;
-    public int tickCount = 0;
+    private Graphics g;
 
-    public Game() {
-        // Screen Dimensions
-        setMinimumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-        setMaximumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-        setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
+    private boolean running;
+    private int tickCount = 0;
 
-        // JFrame
-        frame = new JFrame(NAME);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
+    private SpriteSheet spriteSheet;
+    private BufferedImage sprite;
+    private Display display;
 
-        frame.add(this, BorderLayout.CENTER);
-        frame.pack();
-
-        frame.setResizable(false);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+    public Game(String title, int width, int height) {
+        this.title = title;
+        this.width = width;
+        this.height = height;
     }
 
-    public void init() {
-
+    private void init() {
+        display = new Display(title, width, height);
+        sprite = ImageLoader.loadImage("/textures/SpriteSheet.png");
+        spriteSheet = new SpriteSheet(sprite);
     }
 
-    private synchronized void start() {
+    public synchronized void start() {
         running = true;
         new Thread(this).start();
     }
@@ -64,7 +61,7 @@ public class Game extends Canvas implements Runnable {
             long now = System.nanoTime();
             delta += (now - lastTime) / nsPerTick;
             lastTime = now;
-            boolean shouldRender = true;
+            boolean shouldRender = false;
             while (delta >= 1) {
                 ticks++;
                 tick();
@@ -85,7 +82,6 @@ public class Game extends Canvas implements Runnable {
 
             if (System.currentTimeMillis() - lastTimer >= 1000) {
                 lastTimer += 1000;
-                frame.setTitle(NAME + "     Running at: " + ticks + " ticks, " + frames + " frames");
                 frames = 0;
                 ticks = 0;
             }
@@ -96,17 +92,25 @@ public class Game extends Canvas implements Runnable {
         BufferStrategy bs = getBufferStrategy();
         if (bs == null) {
             createBufferStrategy(3);
-
+            return;
         }
+        g = bs.getDrawGraphics();
+        // Clear screen
+        g.clearRect(0, 0, getWidth(), getHeight());
+
+        // Draw area
+        g.drawImage(spriteSheet.crop(0, 0, 16, 16),5 ,5 ,null);
+
+        // show
+        bs.show();
+        g.dispose();
+
     }
 
     private void tick() {
         tickCount++;
     }
 
-    public static void main(String[] args) {
-        new Game().start();
-    }
 }
 
 
