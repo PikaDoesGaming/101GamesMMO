@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
-public class Game extends Canvas implements Runnable {
+public class Game implements Runnable {
 
     private String title;
     private int width,height;
@@ -89,14 +89,14 @@ public class Game extends Canvas implements Runnable {
     }
 
     private void render() {
-        BufferStrategy bs = getBufferStrategy();
+        BufferStrategy bs = display.getCanvas().getBufferStrategy();
         if (bs == null) {
-            createBufferStrategy(3);
+            display.getCanvas().createBufferStrategy(3);
             return;
         }
         g = bs.getDrawGraphics();
         // Clear screen
-        g.clearRect(0, 0, getWidth(), getHeight());
+        g.clearRect(0, 0, width, height);
 
         // Draw area
         g.drawImage(spriteSheet.crop(0, 0, 16, 16),5 ,5 ,null);
