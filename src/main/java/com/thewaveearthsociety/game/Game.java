@@ -3,7 +3,6 @@ package com.thewaveearthsociety.game;
 import com.thewaveearthsociety.gfx.Assets;
 import com.thewaveearthsociety.gfx.Display;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
@@ -79,6 +78,7 @@ public class Game implements Runnable {
             //Resets ticks
             if (System.currentTimeMillis() - lastTimer >= 1000) {
                 display.tick(frames, ticks);
+                System.out.println(frames + " | " + ticks);
                 lastTimer += 1000;
                 frames = 0;
                 ticks = 0;
