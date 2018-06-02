@@ -1,13 +1,12 @@
 package com.thewaveearthsociety.game;
 
+import com.thewaveearthsociety.gfx.Assets;
 import com.thewaveearthsociety.gfx.Display;
-import com.thewaveearthsociety.gfx.ImageLoader;
-import com.thewaveearthsociety.gfx.SpriteSheet;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
+
 
 public class Game implements Runnable {
 
@@ -19,8 +18,6 @@ public class Game implements Runnable {
     private boolean running;
     private int tickCount = 0;
 
-    private SpriteSheet spriteSheet;
-    private BufferedImage sprite;
     private Display display;
 
     public Game(String title, int width, int height) {
@@ -29,10 +26,10 @@ public class Game implements Runnable {
         this.height = height;
     }
 
+    //Initialise classes etc.
     private void init() {
         display = new Display(title, width, height);
-        sprite = ImageLoader.loadImage("/textures/SpriteSheet.png");
-        spriteSheet = new SpriteSheet(sprite);
+        Assets.init();
     }
 
     public synchronized void start() {
@@ -79,8 +76,9 @@ public class Game implements Runnable {
                 frames++;
                 render();
             }
-
+            //Resets ticks
             if (System.currentTimeMillis() - lastTimer >= 1000) {
+                display.tick(frames, ticks);
                 lastTimer += 1000;
                 frames = 0;
                 ticks = 0;
@@ -89,6 +87,7 @@ public class Game implements Runnable {
     }
 
     private void render() {
+        //Buffer Strategy
         BufferStrategy bs = display.getCanvas().getBufferStrategy();
         if (bs == null) {
             display.getCanvas().createBufferStrategy(3);
@@ -99,7 +98,9 @@ public class Game implements Runnable {
         g.clearRect(0, 0, width, height);
 
         // Draw area
-        g.drawImage(spriteSheet.crop(0, 0, 16, 16),5 ,5 ,null);
+        g.drawImage(Assets.dirt, 10, 10, null);
+        g.drawImage(Assets.grass, 36, 10, null);
+        g.drawImage(Assets.stone, 62, 10, null);
 
         // show
         bs.show();

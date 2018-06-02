@@ -5,8 +5,12 @@ import java.awt.*;
 
 public class Display {
 
-    private JFrame frame;
+    public static int tickcount = 0;
+    private static JFrame frame;
     private Canvas canvas;
+
+    private int frames;
+    private int ticks;
 
     private String title;
     private int width, height;
@@ -16,11 +20,17 @@ public class Display {
         this.width = width;
         this.height = height;
 
+        frame = new JFrame(title);
         createDisplay();
     }
 
+    public void tick(int frames, int ticks){
+        this.frames = frames;
+        this.ticks = ticks;
+        frame.setTitle(title + " FPS: " + frames + " | " + "Ticks: " + ticks);
+    }
+
     private void createDisplay(){
-        frame = new JFrame(title);
         frame.setSize(width, height);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(false);
