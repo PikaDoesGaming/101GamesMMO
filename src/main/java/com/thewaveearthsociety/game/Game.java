@@ -2,6 +2,11 @@ package com.thewaveearthsociety.game;
 
 import com.thewaveearthsociety.gfx.Assets;
 import com.thewaveearthsociety.gfx.Display;
+import com.thewaveearthsociety.handler.KeyHandler;
+import com.thewaveearthsociety.handler.MouseHandler;
+import com.thewaveearthsociety.states.GameState;
+import com.thewaveearthsociety.states.MenuState;
+import com.thewaveearthsociety.states.State;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -19,16 +24,33 @@ public class Game implements Runnable {
 
     private Display display;
 
+    //States declaration
+    private State gameState;
+    private State menuState;
+
+    //Input
+    private KeyHandler keyHandler;
+    private MouseHandler mouseHandler;
+
     public Game(String title, int width, int height) {
         this.title = title;
         this.width = width;
         this.height = height;
+        keyHandler = new KeyHandler();
+        mouseHandler = new MouseHandler();
     }
 
     //Initialise classes etc.
     private void init() {
         display = new Display(title, width, height);
+        display.getFrame().addKeyListener(keyHandler);
+        display.getFrame().addMouseListener(mouseHandler);
         Assets.init();
+
+        //States initialisation
+        menuState = new MenuState(this);
+        gameState = new GameState(this);
+        State.setState(gameState);
     }
 
     public synchronized void start() {
@@ -78,12 +100,15 @@ public class Game implements Runnable {
             //Resets ticks
             if (System.currentTimeMillis() - lastTimer >= 1000) {
                 display.tick(frames, ticks);
-                System.out.println(frames + " | " + ticks);
                 lastTimer += 1000;
                 frames = 0;
                 ticks = 0;
             }
         }
+    }
+
+    public KeyHandler getKeyHandler(){
+        return keyHandler;
     }
 
     private void render() {
@@ -98,9 +123,9 @@ public class Game implements Runnable {
         g.clearRect(0, 0, width, height);
 
         // Draw area
-        g.drawImage(Assets.dirt, 10, 10, null);
-        g.drawImage(Assets.grass, 36, 10, null);
-        g.drawImage(Assets.stone, 62, 10, null);
+        if(State.getSate() != null){
+            State.getSate().render(g);
+        }
 
         // show
         bs.show();
@@ -109,6 +134,11 @@ public class Game implements Runnable {
     }
 
     private void tick() {
+        keyHandler.tick();
+
+        if(State.getSate() != null){
+            State.getSate().tick();
+        }
         tickCount++;
     }
 

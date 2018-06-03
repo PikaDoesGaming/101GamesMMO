@@ -14,11 +14,14 @@ This Game does not try to be limited to one genre, it will be as diversified as 
 
 ##Sprites
 
-######RPG ItemPack by Kyrise: 
+######RPG Items: 
     https://kyrise.itch.io/kyrises-free-16x16-rpg-icon-pack
     
-######Explosions by Ansimuz: 
+######Explosions: 
     https://ansimuz.itch.io/explosion-animations-pack
     
-######Controller Icons by Eggboycolor:
+######Controller Icons:
     https://eggboycolor.itch.io/free-pixel-gamepad-buttons
+    
+######Ash Character Sprites:
+    https://digibody.deviantart.com   
